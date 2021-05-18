@@ -1,19 +1,8 @@
 class UsersController < ApplicationController
-  before_action :user_authenticate, except: :create
+  # before_action :authenticate, except: :create
   before_action :find_user, except: %i[create index]
 
-  # # GET /users
-  # def index
-  #   @users = User.all
-  #   render json: @users, status: :ok
-  # end
-  #
-  # # GET /users/{username}
-  # def show
-  #   render json: @user, status: :ok
-  # end
-
-  # POST /users
+  
   def create
     @user = User.new(user_params)
     if @user.save

@@ -1,11 +1,12 @@
 class ApplyjobsController < ApplicationController
-  before_action :user_authenticate, only: [:create]
+  before_action :user_authenticate
   def index
     applyjobs = Applystatus.all
     render json: { applyjobs: applyjobs }
   end
 
   def create
+    
     @job = Job.find_by(id: params[:job_id], status: true)
     if @job.present?
       @uids = Applystatus.where(user_id: @user)
@@ -29,6 +30,8 @@ class ApplyjobsController < ApplicationController
           info: "Job is inactive."
       }
     end
+  
+  
 
   end
 end

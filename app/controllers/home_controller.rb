@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-    if admin_authenticate
+    if params[:role] =  'admin'
       @jobs = Job.all
       @users = User.all
       @all_applied_jobs = Applystatus.select("job_id, user_id, status, id")
@@ -10,8 +10,7 @@ class HomeController < ApplicationController
           all_applied_jobs: @all_applied_jobs
       }
       #for user login
-    else
-      if user_authenticate
+    elsif params[:role] =  'user'
       @jobs = Job.where(status: true)
       @applied_jobs = Applystatus.select("status").where(job_id: @jobs, user_id: @user)
       render json: {
@@ -26,5 +25,5 @@ class HomeController < ApplicationController
       }
     end
   end
-  end
-  end
+  
+end  

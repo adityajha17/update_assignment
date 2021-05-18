@@ -1,8 +1,10 @@
 class JobsController < ApplicationController
-  before_action :admin_authenticate, only: [:create_job,  :edit_job, :update_user_status]
+  before_action :admin_authenticate, only: [:available_job, :create_job,  :edit_job, :update_user_status]
 
   def available_job
-     if admin_authenticate
+
+     
+      
       @job = Job.all
       @users = User.all
       @all_applied_jobs = Applystatus.select("job_id, user_id, status, id")
@@ -11,24 +13,21 @@ class JobsController < ApplicationController
           # user: @users,
           # all_applied_jobs: @all_applied_jobs
       }
-    else
-      render json: { status: 500, info: "need an Admin Login" }
-    end
+    
   end
 
   def create_job
-
-    @job = Job.new(job_params)
-    if @job.save
-      render json: { status: 200, info: "Job created" }
-    else
-      render json: { status: 500, errors: @job.errors }
-    end
-
+   
+      @job = Job.new(job_params)
+      if @job.save
+        render json: { status: 200, info: "Job created" }
+      else
+        render json: { status: 500, errors: @job.errors }
+      end
+    
   end
 
     def edit_job
-
         @job = Job.find_by(id: params[:id])
         if @job.present?
           if @job.update(update_job_status)
@@ -39,9 +38,11 @@ class JobsController < ApplicationController
         else
           render json: { status: 500, info: "Job does not exist" }
         end
+     
     end
 
     def update_user_status
+     
         @usr = Applystatus.find_by(job_id: params[:job_id], user_id: @user)
         puts "errors", @usr
         if @usr.present?
@@ -58,7 +59,7 @@ class JobsController < ApplicationController
         else
           render json: { status: 500,  info: "No available job(s) for this User" }
         end
-
+      
     end
 
     private
